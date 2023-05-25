@@ -28,7 +28,7 @@ const TabsWrapper = styled.div`
 type Tab = "about" | "stats" | "evolution";
 
 const DetailPage: React.FC = () => {
-  const { id } = useParams<Params>();
+  const { id } = useParams<Params>() as { id: string };
   const [selectedTab, setSelectedTab] = useState<Tab>("about");
 
   const speciesResult = useSpecies(id);
@@ -81,6 +81,37 @@ const DetailPage: React.FC = () => {
         color={color}
       ></PokemonInfo>
       <Tabs tab={selectedTab} onClick={handleClick} />
+      {selectedTab === "about" && (
+        <About
+          isLoading={pokemonResult.isLoading || speciesResult.isLoading}
+          color={color}
+          growthRate={growthRate}
+          flavorText={flavorText}
+          genderRate={genderRate}
+          isLegendary={isLegendary}
+          isMythical={isMythical}
+          types={types}
+          weight={weight}
+          height={height}
+          baseExp={baseExp}
+          abilities={abilities}
+        />
+      )}
+      {selectedTab === "stats" && (
+        <Stats
+          isLoading={pokemonResult.isLoading || speciesResult.isLoading}
+          color={color}
+          stats={stats}
+        />
+      )}
+      {selectedTab === "evolution" && (
+        <Evolution
+          id={id}
+          isLoading={speciesResult.isLoading}
+          color={color}
+          url={evolutionChainUrl}
+        />
+      )}
     </div>
   );
 };

@@ -64,12 +64,12 @@ interface Props {
   color?: Color;
 }
 
-const Stats: React.FC<Props> = (stats, color) => {
+const Stats: React.FC<Props> = ({ stats, color }) => {
   return (
     <Base>
       <Title color={mapColorToHex(color?.name)}>Base Stats</Title>
       <List>
-        {/* {stats?.map(({ stat, base_stat }, idx) => (
+        {stats?.map(({ stat, base_stat }, idx) => (
           <ListItem key={idx}>
             <Name>
               {stat.name === "hp" ? stat.name.toUpperCase() : stat.name}
@@ -82,7 +82,7 @@ const Stats: React.FC<Props> = (stats, color) => {
               />
             </GaugeWrapper>
           </ListItem>
-        ))} */}
+        ))}
       </List>
     </Base>
   );
