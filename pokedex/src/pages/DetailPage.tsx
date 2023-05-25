@@ -1,15 +1,86 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import styled from "@emotion/styled/macro";
+
+import PokemonInfo from "../components/PokemonInfo";
+import Tabs from "../components/Tabs";
+import About from "../components/About";
+import Stats from "../components/Stats";
+import Evolution from "../components/Evolution";
+
+import { PokemonResponse } from "../types";
+import usePokemon from "../hooks/usePokemon";
+import useSpecies from "../hooks/useSpecies";
 
 type Params = {
   id: string;
 };
 
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TabsWrapper = styled.div`
+  margin: 24px auto 0;
+`;
+
+type Tab = "about" | "stats" | "evolution";
+
 const DetailPage: React.FC = () => {
   const { id } = useParams<Params>();
+  const [selectedTab, setSelectedTab] = useState<Tab>("about");
+
+  const speciesResult = useSpecies(id);
+  const pokemonResult = usePokemon<PokemonResponse>(id);
+
+  const { name, types, height, weight, abilities, baseExp, stats } = useMemo(
+    () => ({
+      name: pokemonResult.data?.data.name,
+      types: pokemonResult.data?.data.types,
+      height: pokemonResult.data?.data.height,
+      weight: pokemonResult.data?.data.weight,
+      abilities: pokemonResult.data?.data.abilities,
+      baseExp: pokemonResult.data?.data.base_experience,
+      stats: pokemonResult.data?.data.stats
+    }),
+    [pokemonResult]
+  );
+
+  const {
+    color,
+    growthRate,
+    flavorText,
+    genderRate,
+    isLegendary,
+    isMythical,
+    evolutionChainUrl
+  } = useMemo(
+    () => ({
+      color: speciesResult.data?.data.color,
+      growthRate: speciesResult.data?.data.growth_rate.name,
+      flavorText: speciesResult.data?.data.flavor_text_entries[0].flavor_text,
+      genderRate: speciesResult.data?.data.gender_rate,
+      isLegendary: speciesResult.data?.data.is_legendary,
+      isMythical: speciesResult.data?.data.is_mythical,
+      evolutionChainUrl: speciesResult.data?.data.evolution_chain.url
+    }),
+    [speciesResult]
+  );
+
+  const handleClick = (tab: Tab) => {
+    setSelectedTab(tab);
+  };
+
   return (
     <div>
-      <p>DetailPage id: {id}</p>
+      <PokemonInfo
+        id={id}
+        name={name}
+        types={types}
+        color={color}
+      ></PokemonInfo>
+      <Tabs tab={selectedTab} onClick={handleClick} />
     </div>
   );
 };
