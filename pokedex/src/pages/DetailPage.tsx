@@ -73,7 +73,7 @@ const DetailPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <Container>
       <PokemonInfo
         id={id}
         name={name}
@@ -112,7 +112,7 @@ const DetailPage: React.FC = () => {
           url={evolutionChainUrl}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

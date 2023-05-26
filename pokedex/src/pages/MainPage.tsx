@@ -40,14 +40,14 @@ const Image = styled.img`
 
 const IndexPage: React.FC = () => {
   return (
-    <div>
+    <Base>
       <Title>Pokedex</Title>
       <Description>포켓몬스터 도감</Description>
       <PokemonList></PokemonList>
       <ImageWrapper>
         <Image src="/assets/pocketball.svg" />
       </ImageWrapper>
-    </div>
+    </Base>
   );
 };
 
